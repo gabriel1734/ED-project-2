@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "arvores.h"
+#include "conversao.h"
 #define MAX 100
 
 
@@ -30,21 +31,25 @@ int main(int argc, char *argv[]){
   
   int i = 0;
 
+  int count = 0;
+  int **binaries = generateBinaries(n, &count);
+  printf("count = %d\n", count);
 
   while(fgets(linha, sizeof(MAX), arq) != NULL){
     linha[strlen(linha)] = '\0';
     
     char *token = strtok(linha, ";");
 
-    No *root = createNode(NULL);
+    //No *root = createNode(NULL);
+   
 
     while (token != NULL){
       int decimal = atoi(token);
       char binary[33];
-      decimalParaBinario(decimal, binary, k);
-      root = insert(root, binary);
-      printf("%s\n", binary);
+      decimalParaBinario(decimal, binary, n);
+      //root = insert(root, binary);
       printf("%s\n", token);
+      printf("%s\n", binary);
       token = strtok(NULL, ";");
 
       i++;

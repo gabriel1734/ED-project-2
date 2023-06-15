@@ -2,17 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-void decimalParaBinario(int num, char *binary, int numBits)
-{
-  for (int i = numBits - 1; i >= 0; i--)
-  {
-    binary[i] = (num % 2) + '0';
-    num /= 2;
-  }
-}
 
-typedef struct no {
+
+
+
+/*typedef struct no {
   int decimal;
+  char binary[33];
   struct no *esq;
   struct no *dir;
 } No;
@@ -63,4 +59,4 @@ No * remove(No * root, char val) {
     root->dir = remove(root->dir, temp->decimal);
   }
   return root;
-}
+}*/
