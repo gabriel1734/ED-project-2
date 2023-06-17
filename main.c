@@ -3,7 +3,7 @@
 #include <string.h>
 #include "arvores.h"
 #include "conversao.h"
-#define MAX 100
+#define MAX 1000000
 
 
 
@@ -34,22 +34,26 @@ int main(int argc, char *argv[]){
   int count = 0;
   int **binaries = generateBinaries(n, &count);
   printf("count = %d\n", count);
+  
+  
+  No *root = NULL;
+  char sequencia[1000000] = "";
 
   while(fgets(linha, sizeof(MAX), arq) != NULL){
     linha[strlen(linha)] = '\0';
     
     char *token = strtok(linha, ";");
-
-    //No *root = createNode(NULL);
+    
+    
    
 
     while (token != NULL){
       int decimal = atoi(token);
       char binary[33];
       decimalParaBinario(decimal, binary, n);
-      //root = insert(root, binary);
-      printf("%s\n", token);
-      printf("%s\n", binary);
+      root = insert(root, binary, decimal);
+      //printf("%s\n", token);
+      //printf("%s\n", binary);
       token = strtok(NULL, ";");
 
       i++;
@@ -57,9 +61,16 @@ int main(int argc, char *argv[]){
   }
   
 
-  printf("k = %d\n", k);
-  printf("n = %d\n", n);
+  //printf("k = %d\n", k);
+  //printf("n = %d\n", n);
+  //printf("Percurso em ordem: ");
+  //percorrerEmOrdem(root);
+  //printf("\n");
+  //printf("Raiz: %d\n", root->decimal);
 
+  concatenarBinarios(root, sequencia);
+  //dividirBinarios(sequencia, k);
+  contarOcorrencias(sequencia, k);
 
   fclose(arq);
 

@@ -2,61 +2,114 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
-
-
-/*typedef struct no {
+typedef struct no {
   int decimal;
   char binary[33];
   struct no *esq;
   struct no *dir;
 } No;
 
-No * createNode(char val) {
+No * createNode(const char* binary, int decimal) {
   No *newNode = (No *) malloc(sizeof(No));
-  newNode->binary = val;
+  newNode->decimal = decimal;
+  strcpy(newNode->binary, binary);
   newNode->esq = NULL;
   newNode->dir = NULL;
   return newNode;
 }
 
-No * insert(No * root, char val) {
-  if(root == NULL) {
-    return createNode(val);
+void percorrerEmOrdem(No *root) {
+  if (root == NULL) {
+    return;
   }
-  if(val < root->decimal) {
-    root->esq = insert(root->esq, val);
-  } else if(val > root->decimal) {
-    root->dir = insert(root->dir, val);
+
+  percorrerEmOrdem(root->esq);        // Percorre a subárvore esquerda
+  printf("%s ", root->binary);       // Imprime o valor do nó atual
+  percorrerEmOrdem(root->dir);        // Percorre a subárvore direita
+}
+
+No * insert(No * root, char *binary, int decimal) {
+  if(root == NULL) {
+    return createNode(binary, decimal);
+  }
+  if(decimal < root->decimal) {
+    root->esq = insert(root->esq, binary, decimal);
+  } else if(decimal > root->decimal) {
+    root->dir = insert(root->dir, binary, decimal);
   }
 
   return root;
 }
 
-
-No * remove(No * root, char val) {
-  if(root == NULL) {
-    return root;
+void concatenarBinarios(No *root, char *sequencia) {
+  if (root == NULL) {
+    return;
   }
-  if(val < root->decimal) {
-    root->esq = remove(root->esq, val);
-  } else if(val > root->decimal) {
-    root->dir = remove(root->dir, val);
-  } else {
-    if(root->esq == NULL) {
-      No *temp = root->dir;
-      free(root);
-      return temp;
-    } else if(root->dir == NULL) {
-      No *temp = root->esq;
-      free(root);
-      return temp;
+
+  // Concatena o binário do nó atual com a sequência existente
+  strcat(sequencia, root->binary);
+
+  concatenarBinarios(root->esq, sequencia); // Percorre a subárvore esquerda
+  concatenarBinarios(root->dir, sequencia);  // Percorre a subárvore direita
+}
+
+void dividirBinarios(const char *sequencia, int k){
+  int tamanho = strlen(sequencia);
+  int numItens = tamanho / k;
+
+  printf("Itens de tamanho %d: ", k);
+  for (int i = 0; i < numItens; i++){
+    for (int j = 0; j < k; j++) {
+      printf("%c", sequencia[i * k + j]);
     }
-
-    No *temp = minValueNode(root->dir);
-    root->decimal = temp->decimal;
-    root->dir = remove(root->dir, temp->decimal);
+    printf(" ");
   }
-  return root;
-}*/
+  printf("\n");
+}
+
+// Função para comparar dois binários
+int compararBinarios(const char *binario1, const char *binario2) {
+  return strcmp(binario1, binario2);
+}
+
+// Função para contar a ocorrência de cada binário
+void contarOcorrencias(const char *sequencia, int k) {
+  int tamanho = strlen(sequencia);
+  int numItens = tamanho / k;
+  char **binarios = (char **)malloc(numItens * sizeof(char *));
+  int *contagem = (int *)calloc(numItens, sizeof(int));
+
+  // Inicializa o array de binários com os itens da sequência
+  for (int i = 0; i < numItens; i++){
+    binarios[i] = (char *)malloc(5 * sizeof(char));
+    strncpy(binarios[i], sequencia + i * k, k);
+    binarios[i][k] = '\0';
+  }
+
+  // Conta as ocorrências de cada binário
+  for (int i = 0; i < numItens; i++) {
+    if (contagem[i] == 0) {
+      contagem[i] = 1;
+      for (int j = i + 1; j < numItens; j++) {
+        if (compararBinarios(binarios[i], binarios[j]) == 0) {
+          contagem[i]++;
+          contagem[j] = -1; // Marca o binário como repetido para evitar contagens duplicadas
+        }
+      }
+    }
+  }
+
+  // Imprime a contagem de cada binário repetido
+  for (int i = 0; i < numItens; i++) {
+    if (contagem[i] > 1) {
+      printf("O binário %s se repete %d vezes.\n", binarios[i], contagem[i]);
+    }
+  }
+
+  // Libera a memória alocada
+  for (int i = 0; i < numItens; i++) {
+    free(binarios[i]);
+  }
+  free(binarios);
+  free(contagem);
+}
