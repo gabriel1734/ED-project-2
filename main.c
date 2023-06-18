@@ -3,6 +3,7 @@
 #include <string.h>
 #include "arvores.h"
 #include "conversao.h"
+#include "comparacao.h"
 #define MAX 1000000
 
 
