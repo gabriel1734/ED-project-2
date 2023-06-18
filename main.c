@@ -31,14 +31,10 @@ int main(int argc, char *argv[]){
   
   
   int i = 0;
-
-  int count = 0;
-  int **binaries = generateBinaries(n, &count);
-  printf("count = %d\n", count);
   
   
   No *root = NULL;
-  char sequencia[1000000] = "";
+  char sequencia[100000000000] = "";
 
   while(fgets(linha, sizeof(MAX), arq) != NULL){
     linha[strlen(linha)] = '\0';
@@ -60,7 +56,11 @@ int main(int argc, char *argv[]){
       i++;
     }
   }
-  
+
+  ItemBinario *binarios;
+
+  // Gera todos os binários de tamanho k
+  gerarBinarios(k, &binarios);
 
   //printf("k = %d\n", k);
   //printf("n = %d\n", n);
@@ -70,8 +70,12 @@ int main(int argc, char *argv[]){
   //printf("Raiz: %d\n", root->decimal);
 
   concatenarBinarios(root, sequencia);
+  printf("Sequência: %s\n", sequencia);
   //dividirBinarios(sequencia, k);
-  contarOcorrencias(sequencia, k);
+  contarOcorrencias(sequencia, k, binarios);
+
+
+  
 
   fclose(arq);
 

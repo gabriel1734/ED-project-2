@@ -1,3 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <memory.h>
+
+typedef struct {
+  char binario[5];
+  int contador;
+} ItemBinario;
+
+// Função para gerar todos os binários possíveis do tamanho k
+void gerarBinarios(int k, ItemBinario **binarios)
+{
+  int totalBinarios = 1 << k; // 2^k
+
+  // Aloca memória para o array de binários
+  *binarios = (ItemBinario *)malloc(totalBinarios * sizeof(ItemBinario));
+  if (*binarios == NULL)
+  {
+    printf("Erro ao alocar memória.\n");
+    return;
+  }
+
+  // Gera todos os binários possíveis
+  for (int i = 0; i < totalBinarios; i++)
+  {
+    for (int j = k - 1; j >= 0; j--)
+    {
+      (*binarios)[i].binario[j] = (i & (1 << (k - j - 1))) ? '1' : '0';
+    }
+    (*binarios)[i].binario[k] = '\0';
+    (*binarios)[i].contador = 0;
+  }
+}
+
 void concatenarBinarios(No *root, char *sequencia)
 {
   if (root == NULL)
@@ -29,59 +64,43 @@ void dividirBinarios(const char *sequencia, int k)
   printf("\n");
 }
 
-// Função para comparar dois binários
-int compararBinarios(const char *binario1, const char *binario2)
+int compararItemBinario(const void *a, const void *b)
 {
-  return strcmp(binario1, binario2);
+  const ItemBinario *item1 = (const ItemBinario *)a;
+  const ItemBinario *item2 = (const ItemBinario *)b;
+  return item2->contador - item1->contador;
 }
 
 // Função para contar a ocorrência de cada binário
-void contarOcorrencias(const char *sequencia, int k)
+void contarOcorrencias(const char *sequencia, int k, ItemBinario *itensBinarios)
 {
-  int tamanho = strlen(sequencia);
-  int numItens = tamanho / k;
-  char **binarios = (char **)malloc(numItens * sizeof(char *));
-  int *contagem = (int *)calloc(numItens, sizeof(int));
+  int totalBinarios = 1 << k; // 2^k
+  int numItens = strlen(sequencia) / k;
 
-  // Inicializa o array de binários com os itens da sequência
+  
+
+  // Conta as aparições de cada binário na sequência
   for (int i = 0; i < numItens; i++)
   {
-    binarios[i] = (char *)malloc(5 * sizeof(char));
-    strncpy(binarios[i], sequencia + i * k, k);
-    binarios[i][k] = '\0';
-  }
-
-  // Conta as ocorrências de cada binário
-  for (int i = 0; i < numItens; i++)
-  {
-    if (contagem[i] == 0)
+    for (int j = 0; j <= numItens - k; j++)
     {
-      contagem[i] = 1;
-      for (int j = i + 1; j < numItens; j++)
+      if (strncmp(sequencia + j, itensBinarios[i].binario, k) == 0)
       {
-        if (compararBinarios(binarios[i], binarios[j]) == 0)
-        {
-          contagem[i]++;
-          contagem[j] = -1; // Marca o binário como repetido para evitar contagens duplicadas
-        }
+        itensBinarios[i].contador++;
       }
     }
   }
 
-  // Imprime a contagem de cada binário repetido
-  for (int i = 0; i < numItens; i++)
+  // Ordena os itens binários em ordem decrescente pelo contador
+  qsort(itensBinarios, totalBinarios, sizeof(ItemBinario), compararItemBinario);
+
+  // Exibe todos os binários em ordem decrescente pelo número de aparições
+  printf("Binários de tamanho %d em ordem decrescente pelo número de aparições:\n", k);
+  for (int i = 0; i < totalBinarios; i++)
   {
-    if (contagem[i] > 1)
-    {
-      printf("O binário %s se repete %d vezes.\n", binarios[i], contagem[i]);
-    }
+    printf("%s: %d\n", itensBinarios[i].binario, itensBinarios[i].contador);
   }
 
   // Libera a memória alocada
-  for (int i = 0; i < numItens; i++)
-  {
-    free(binarios[i]);
-  }
-  free(binarios);
-  free(contagem);
+  free(itensBinarios);
 }
