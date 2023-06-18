@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
   
   
   No *root = NULL;
-  char sequencia[100000000000] = "";
+  char sequencia[1000000] = "";
 
   while(fgets(linha, sizeof(MAX), arq) != NULL){
     linha[strlen(linha)] = '\0';
