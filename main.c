@@ -70,6 +70,7 @@ int main(int argc, char *argv[]){
   //printf("Raiz: %d\n", root->decimal);
 
   concatenarBinarios(root, sequencia);
+  queimaArvore(root);
   printf("Sequência: %s\n", sequencia);
   //dividirBinarios(sequencia, k);
   contarOcorrencias(sequencia, k, binarios);

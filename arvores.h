@@ -18,6 +18,16 @@ No * createNode(const char* binary, int decimal) {
   return newNode;
 }
 
+void queimaArvore(No *root) {
+  if (root == NULL) {
+    return;
+  }
+
+  queimaArvore(root->esq);
+  queimaArvore(root->dir);
+  free(root);
+}
+
 void percorrerEmOrdem(No *root) {
   if (root == NULL) {
     return;
