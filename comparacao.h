@@ -68,7 +68,15 @@ int compararItemBinario(const void *a, const void *b)
 {
   const ItemBinario *item1 = (const ItemBinario *)a;
   const ItemBinario *item2 = (const ItemBinario *)b;
-  return item2->contador - item1->contador;
+
+  // Primeiro, compara o contador
+  if (item1->contador != item2->contador)
+  {
+    return item2->contador - item1->contador;
+  }
+
+  // Em caso de empate, compara o binário
+  return strcmp(item2->binario, item1->binario);
 }
 
 // Função para contar a ocorrência de cada binário
