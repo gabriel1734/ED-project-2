@@ -47,22 +47,7 @@ void concatenarBinarios(No *root, char *sequencia)
   concatenarBinarios(root->dir, sequencia); // Percorre a subárvore direita
 }
 
-void dividirBinarios(const char *sequencia, int k)
-{
-  int tamanho = strlen(sequencia);
-  int numItens = tamanho / k;
 
-  printf("Itens de tamanho %d: ", k);
-  for (int i = 0; i < numItens; i++)
-  {
-    for (int j = 0; j < k; j++)
-    {
-      printf("%c", sequencia[i * k + j]);
-    }
-    printf(" ");
-  }
-  printf("\n");
-}
 
 int compararItemBinario(const void *a, const void *b)
 {
